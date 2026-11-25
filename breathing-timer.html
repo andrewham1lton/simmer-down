@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Free breathing timer at six breaths a minute</title>
+<meta name="description" content="A free paced-breathing timer in your browser. Breathe at six breaths a minute, or set your own pace from 4.5 to 7 and how long each out-breath lasts. Nothing to install.">
+<link rel="canonical" href="https://andrewham1lton.github.io/simmer-down/breathing-timer.html">
+<meta name="apple-itunes-app" content="app-id=6835202432">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Simmer Down">
+<meta property="og:title" content="Free breathing timer at six breaths a minute">
+<meta property="og:description" content="A free paced-breathing timer in your browser. Breathe at six breaths a minute, or set your own pace from 4.5 to 7 and how long each out-breath lasts. Nothing to install.">
+<meta property="og:url" content="https://andrewham1lton.github.io/simmer-down/breathing-timer.html">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="guide">
+  <header><a href="./">Simmer Down</a></header>
+  <nav><a href="./#guides">Guides</a><a href="support.html">Support</a><a href="privacy.html">Privacy</a></nav>
+  <h1>A breathing timer at six breaths a minute</h1>
+
+  <p>Press Begin and follow the circle: breathe in as it grows and out as it shrinks. Six breaths a minute is ten seconds a breath. Below the button you can change the pace, the balance between the in-breath and the out-breath, and the length.</p>
+
+  <section class="timer card" aria-label="Breathing timer">
+    <div class="pacer" aria-hidden="true"><div class="pacer-dot" id="dot"></div></div>
+    <p class="cue" id="cue" aria-live="polite">Press Begin when you're ready.</p>
+    <p class="count muted" id="count">&nbsp;</p>
+    <p class="still-note muted small">Reduce Motion is on, so the circle stays still and the words lead.</p>
+    <p class="start"><button type="button" class="begin" id="toggle">Begin</button></p>
+    <p class="muted small" id="time">&nbsp;</p>
+    <div class="controls">
+      <label for="pace">Pace: <output id="pace-out" for="pace">6 breaths a minute</output></label>
+      <input type="range" id="pace" min="4.5" max="7" step="0.5" value="6" aria-valuetext="6 breaths a minute">
+      <label for="ratio">In-breath and out-breath</label>
+      <select id="ratio">
+        <option value="0.5">The same length</option>
+        <option value="0.4" selected>Out-breath a little longer</option>
+        <option value="0.3333">Out-breath twice as long</option>
+      </select>
+      <label for="length">Length</label>
+      <select id="length">
+        <option value="120">2 minutes</option>
+        <option value="300" selected>5 minutes</option>
+        <option value="600">10 minutes</option>
+        <option value="0">Until you end it</option>
+      </select>
+    </div>
+    <p class="muted small" id="summary">10 seconds a breath: 4 in, 6 out.</p>
+    <noscript><p>The moving timer needs JavaScript. Without it, count 4 seconds in and 6 seconds out.</p></noscript>
+  </section>
+
+  <h2>How to use it</h2>
+  <ol>
+    <li>Sit or lie comfortably and let your shoulders drop.</li>
+    <li>Breathe in through your nose as the circle grows. Let your belly move more than your chest.</li>
+    <li>Breathe out slowly as it shrinks, through your nose or through softly pursed lips.</li>
+    <li>Keep each breath small and smooth. Slow breathing doesn't need big breaths.</li>
+  </ol>
+  <p>With a screen reader, the timer says "Breathe in" and "Breathe out" as each part of the breath begins, so you can close your eyes and listen. If you feel light-headed, stop and breathe normally. Breathing in too deeply is the usual reason.</p>
+
+  <h2>Why six breaths a minute</h2>
+  <p>Your heart rate rises a little as you breathe in and falls as you breathe out. Research on paced breathing describes that rise and fall as largest, for many adults, at around six breaths a minute. Your own pace may sit a little either side, which is why this timer goes from 4.5 to 7. <a href="find-your-breathing-pace.html">How to find your own pace</a>.</p>
+
+  <h2>Choosing the balance</h2>
+  <p>The same length in and out is the easiest place to start. Many slow-breathing practices make the out-breath a little longer, such as 4 seconds in and 6 out, and many people find that more settling. Twice as long out suits slower paces once the rhythm feels comfortable. <a href="longer-exhale-breathing.html">More on a longer out-breath</a>.</p>
+
+  <h2>What this page does with your data</h2>
+  <p>Nothing. The timer runs in your browser. It sends nothing, stores nothing and needs no account.</p>
+
+  <h2>Where Simmer Down fits</h2>
+  <div class="card">
+    <p>This timer keeps the pace. Simmer Down adds your own heart rhythm: rest a fingertip over your iPhone's rear camera, follow the slow breathing guide, and watch your heart rate rise as you breathe in and ease as you breathe out.</p>
+    <p>Or put the phone down and breathe hands-free, led by gentle taps. The two-minute Reset is free for good.</p>
+    <p><a class="store" href="https://apps.apple.com/app/apple-store/id6835202432?pt=128607626&amp;ct=site-timer&amp;mt=8">Get Simmer Down on the App Store</a></p>
+  </div>
+
+  <footer>
+    <p>Simmer Down is for relaxation and breathing practice. It is not a medical device.</p>
+    <p><a href="./">Simmer Down</a> · <a href="./#guides">Guides</a> · <a href="support.html">Support</a> · <a href="privacy.html">Privacy policy</a></p>
+    <p>Apple and iPhone are trademarks of Apple Inc. App Store is a service mark of Apple Inc.</p>
+  </footer>
+</main>
+<script>
+(function () {
+  "use strict";
+  var dot = document.getElementById("dot");
+  var cue = document.getElementById("cue");
+  var count = document.getElementById("count");
+  var pace = document.getElementById("pace");
+  var paceOut = document.getElementById("pace-out");
+  var ratio = document.getElementById("ratio");
+  var length = document.getElementById("length");
+  var summary = document.getElementById("summary");
+  var toggle = document.getElementById("toggle");
+  var time = document.getElementById("time");
+  var still = window.matchMedia("(prefers-reduced-motion: reduce)");
+  var running = false, frame = 0, start = 0, breathStart = 0, breath = null, phase = "", shown = -1, clock = "";
+
+  function settings() {
+    var period = 60 / parseFloat(pace.value), share = parseFloat(ratio.value);
+    return { period: period, inhale: period * share, exhale: period * (1 - share) };
+  }
+  function seconds(value) {
+    return String(Math.round(value * 10) / 10);
+  }
+  function minutes(value) {
+    var whole = Math.floor(value);
+    return Math.floor(whole / 60) + ":" + ("0" + (whole % 60)).slice(-2);
+  }
+  function describe() {
+    var s = settings(), words = pace.value + " breaths a minute";
+    paceOut.textContent = words;
+    pace.setAttribute("aria-valuetext", words);
+    summary.textContent = seconds(s.period) + " seconds a breath: " + seconds(s.inhale) + " in, " +
+      seconds(s.exhale) + " out." + (running ? " A change starts with the next breath." : "");
+  }
+  function ease(x) {
+    return 0.5 - 0.5 * Math.cos(Math.PI * x);
+  }
+  function draw(size) {
+    dot.style.transform = still.matches ? "" : "scale(" + (0.4 + 0.6 * size).toFixed(3) + ")";
+  }
+  function tick(now) {
+    var limit = parseFloat(length.value), t = (now - breathStart) / 1000;
+    while (t >= breath.period) {
+      breathStart += breath.period * 1000;
+      if (limit && (breathStart - start) / 1000 >= limit - 0.05) {
+        stop("That's the session. Breathe normally for a moment.");
+        return;
+      }
+      breath = settings();
+      describe();
+      t = (now - breathStart) / 1000;
+    }
+    var inhaling = t < breath.inhale;
+    draw(inhaling ? ease(t / breath.inhale) : 1 - ease((t - breath.inhale) / breath.exhale));
+    var name = inhaling ? "Breathe in" : "Breathe out";
+    if (name !== phase) {
+      phase = name;
+      cue.textContent = name;
+    }
+    var left = Math.max(1, Math.ceil((inhaling ? breath.inhale : breath.period) - t));
+    if (left !== shown) {
+      shown = left;
+      count.textContent = left + (left === 1 ? " second" : " seconds");
+    }
+    var elapsed = (now - start) / 1000, text = minutes(elapsed) + (limit ? " of " + minutes(limit) : "");
+    if (text !== clock) {
+      clock = text;
+      time.textContent = text;
+    }
+    frame = window.requestAnimationFrame(tick);
+  }
+  function begin() {
+    running = true;
+    start = breathStart = performance.now();
+    breath = settings();
+    phase = "";
+    shown = -1;
+    clock = "";
+    toggle.textContent = "End session";
+    describe();
+    frame = window.requestAnimationFrame(tick);
+  }
+  function stop(message) {
+    running = false;
+    window.cancelAnimationFrame(frame);
+    toggle.textContent = "Begin";
+    cue.textContent = message;
+    count.innerHTML = "&nbsp;";
+    time.innerHTML = "&nbsp;";
+    draw(0);
+    describe();
+  }
+  toggle.addEventListener("click", function () {
+    if (running) {
+      stop("Session ended. Breathe normally for a moment.");
+    } else {
+      begin();
+    }
+  });
+  pace.addEventListener("input", describe);
+  ratio.addEventListener("change", describe);
+  describe();
+  draw(0);
+})();
+</script>
+</body>
+</html>

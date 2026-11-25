@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://andrewham1lton.github.io/simmer-down/sitemap.xml
